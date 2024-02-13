@@ -1,0 +1,61 @@
+<head>
+
+	<title>simple chat app on localhostjs!</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/localhostjs@0.1.5/localhost.cdn.js"></script>
+	<script src="https://cdn.tailwindcss.com"></script>	
+</head>
+
+
+<script>
+
+	socket.register();
+
+	let registered = false
+	
+function sendmessage(){
+
+	if(!registered) socket.sendToServer("register", socket.id)
+		
+	let text = document.getElementById("text").value
+
+
+	socket.sendToServer("message", {message:text, id:socket.id})
+
+	document.getElementById("messages").innerHTML += `
+<div class="border-2 p-4 border-black"><div>${text}</div><div> by me</div></div>
+`
+
+}
+
+
+socket.on("registered", () => {
+	registered = true
+})
+
+socket.on("message", (data) => {
+
+	let messages = document.getElementById("messages");
+
+	messages.innerHTML += `
+<hr>
+	<div class="border-2 p-4 border-black"><div>${data.message}</div><div> by ${data.id}</div></div>
+<hr>
+`
+
+})
+
+</script>
+
+<body class="flex flex-col p-4">
+	
+	<input type="text" id="text" class="border-2 border-black">
+
+	<button onclick="sendmessage()"> send</button>
+
+
+	<list id="messages" class="flex flex-col">
+		
+	</list>
+</body>

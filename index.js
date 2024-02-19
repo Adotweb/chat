@@ -24,6 +24,12 @@ app.socket.on("message", (data) => {
 
 	let {id, message} = data
 
+
+	console.log(id, message)
+
+
+	console.log(clients)
+
 	app.socket.send("message", {
 		message, id
 	}, clients.filter(s => s!== id))
